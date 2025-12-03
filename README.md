@@ -7,3 +7,7 @@
 - Tracks stinger statistics
 - Saves stats to vic.json
 - Pings you in discord if you want
+- How to use:
+_G.Webhook = "" -- put your webhook here if you want
+_G.UserId = "" -- put your discord id here for ping if you want
+loadstring(game:HttpGet("https://raw.githubusercontent.com/1toop/vichop/refs/heads/main/hop.lua"))()
