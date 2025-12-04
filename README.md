@@ -1,4 +1,4 @@
-<img width="467" height="436" alt="image" src="https://github.com/user-attachments/assets/ba69b455-b7bf-41b3-8add-b9235768dd0d" />
+<img width="320" height="202" alt="image" src="https://github.com/user-attachments/assets/dd676972-8c0a-41e8-b60e-437405be4d52" />
 
 
 # join our discord server https://discord.gg/BcnxDQa32N
