@@ -7,6 +7,7 @@
 - Tracks stinger statistics
 - Saves stats to vic.json
 - Pings you in discord if you want
+- Has a gui with stats
 - How to use:
 - _G.Webhook = "" -- put your webhook here if you want
 - _G.UserId = "" -- put your discord id here for ping if you want
