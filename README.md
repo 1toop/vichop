@@ -12,3 +12,5 @@
 - _G.Webhook = "" -- put your webhook here if you want
 - _G.UserId = "" -- put your discord id here for ping if you want
 - loadstring(game:HttpGet("https://raw.githubusercontent.com/1toop/vichop/refs/heads/main/hop.lua"))()
+
+<img width="599" height="623" alt="image" src="https://github.com/user-attachments/assets/54ff80ca-38c7-470b-b8ae-5ac4855c7aeb" />
