@@ -11,7 +11,7 @@
 - How to use:
 - _G.hook = "" -- discord webhook url (optional)
 - _G.uid = "" -- discord user id for ping (optional)
-- _G.delay = 5 -- delay before server hop in seconds
+- _G.delay = "5" -- delay before server hop in seconds
 - _G.searcher = false -- true = only find vic and send link false = kill vic
 - loadstring(game:HttpGet("https://raw.githubusercontent.com/1toop/vichop/refs/heads/main/hop.lua"))()
 
