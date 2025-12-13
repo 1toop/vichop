@@ -203,7 +203,7 @@ TabSelection.Position = UDim2.new(0, 15, 0, 30)
 TabSelection.Size = UDim2.new(1, -30, 0, 25)
 TabSelection.Visible = false
 TabSelection.Image = "rbxassetid://2851929490"
-TabSelection.ImageColor3 = Color3.new(0.145098, 0.14902, 0.156863)
+TabSelection.ImageColor3 = Color3.fromRGB(25, 25, 30)
 TabSelection.ScaleType = Enum.ScaleType.Slice
 TabSelection.SliceCenter = Rect.new(4, 4, 4, 4)
 
@@ -414,7 +414,7 @@ TextButton_Roundify_4px_2.BackgroundColor3 = Color3.new(1, 1, 1)
 TextButton_Roundify_4px_2.BackgroundTransparency = 1
 TextButton_Roundify_4px_2.Size = UDim2.new(1, 0, 1, 0)
 TextButton_Roundify_4px_2.Image = "rbxassetid://2851929490"
-TextButton_Roundify_4px_2.ImageColor3 = Color3.new(0.203922, 0.207843, 0.219608)
+TextButton_Roundify_4px_2.ImageColor3 = Color3.fromRGB(35, 35, 40)
 TextButton_Roundify_4px_2.ScaleType = Enum.ScaleType.Slice
 TextButton_Roundify_4px_2.SliceCenter = Rect.new(4, 4, 4, 4)
 
@@ -1125,21 +1125,22 @@ function library:AddWindow(title, options)
                         local ico = Instance.new("ImageLabel")
                         ico.Name = "Icon"
                         ico.BackgroundTransparency = 1
-                        ico.Size = UDim2.new(0, 14, 0, 14)
-                        ico.Position = UDim2.new(0, 4, 0, 3)
+                        ico.Size = UDim2.new(0, 16, 0, 16)
+                        ico.Position = UDim2.new(0, 6, 0.5, -8)
                         ico.Image = asset.Url
                         ico.ImageRectSize = asset.ImageRectSize
                         ico.ImageRectOffset = asset.ImageRectOffset
+                        ico.ImageColor3 = Color3.fromRGB(200, 200, 200)
                         ico.ZIndex = new_button.ZIndex + 1
                         ico.Parent = new_button
-                        new_button.Text = "      " .. tab_name
+                        new_button.Text = "       " .. tab_name
                     else
                         new_button.Text = tab_name
                     end
                 else
                     new_button.Text = tab_name
                 end
-                new_button.Size = UDim2.new(0, gNameLen(new_button), 0, 20)
+                new_button.Size = UDim2.new(0, gNameLen(new_button) + 5, 0, 22)
 
                 local new_tab = Prefabs:FindFirstChild("Tab"):Clone()
                 new_tab.Parent = tabs
@@ -1149,16 +1150,20 @@ function library:AddWindow(title, options)
                     if dropdown_open then return end
                     for i, v in next, tab_buttons:GetChildren() do
                         if not (v:IsA("UIListLayout")) then
-                            v:GetChildren()[1].ImageColor3 = Color3.fromRGB(52, 53, 56)
-                            Resize(v, { Size = UDim2.new(0, v.AbsoluteSize.X, 0, 20) }, options.tween_time)
+                            v:GetChildren()[1].ImageColor3 = Color3.fromRGB(35, 35, 40)
+                            Resize(v, { Size = UDim2.new(0, v.AbsoluteSize.X, 0, 22) }, options.tween_time)
+                            local ic = v:FindFirstChild("Icon")
+                            if ic then ic.ImageColor3 = Color3.fromRGB(150, 150, 150) end
                         end
                     end
                     for i, v in next, tabs:GetChildren() do
                         v.Visible = false
                     end
 
-                    Resize(new_button, { Size = UDim2.new(0, new_button.AbsoluteSize.X, 0, 25) }, options.tween_time)
-                    new_button:GetChildren()[1].ImageColor3 = Color3.fromRGB(73, 75, 79)
+                    Resize(new_button, { Size = UDim2.new(0, new_button.AbsoluteSize.X, 0, 24) }, options.tween_time)
+                    new_button:GetChildren()[1].ImageColor3 = Color3.fromRGB(50, 50, 55)
+                    local ic = new_button:FindFirstChild("Icon")
+                    if ic then ic.ImageColor3 = Color3.fromRGB(255, 255, 255) end
                     new_tab.Visible = true
                 end
 
