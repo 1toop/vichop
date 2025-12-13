@@ -934,7 +934,7 @@ local library = {}
 
 function library:GetIcon(name, size)
     if not lucide then return nil end
-    size = size or 20
+    size = size or 48
     return lucide.GetAsset(name, size)
 end
 
@@ -1109,17 +1109,37 @@ function library:AddWindow(title, options)
         local tab_buttons = tab_selection:FindFirstChild("TabButtons")
 
         do -- Add Tab
-            function window_data:AddTab(tab_name)
+            function window_data:AddTab(tab_name, icon)
                 local tab_data = {}
                 tab_name = tostring(tab_name or "New Tab")
                 tab_selection.Visible = true
 
                 local new_button = Prefabs:FindFirstChild("TabButton"):Clone()
                 new_button.Parent = tab_buttons
-                new_button.Text = tab_name
-                new_button.Size = UDim2.new(0, gNameLen(new_button), 0, 20)
                 new_button.ZIndex = new_button.ZIndex + (windows * 10)
                 new_button:GetChildren()[1].ZIndex = new_button:GetChildren()[1].ZIndex + (windows * 10)
+
+                if icon and lucide then
+                    local asset = lucide.GetAsset(icon, 48)
+                    if asset then
+                        local ico = Instance.new("ImageLabel")
+                        ico.Name = "Icon"
+                        ico.BackgroundTransparency = 1
+                        ico.Size = UDim2.new(0, 14, 0, 14)
+                        ico.Position = UDim2.new(0, 4, 0, 3)
+                        ico.Image = asset.Url
+                        ico.ImageRectSize = asset.ImageRectSize
+                        ico.ImageRectOffset = asset.ImageRectOffset
+                        ico.ZIndex = new_button.ZIndex + 1
+                        ico.Parent = new_button
+                        new_button.Text = "      " .. tab_name
+                    else
+                        new_button.Text = tab_name
+                    end
+                else
+                    new_button.Text = tab_name
+                end
+                new_button.Size = UDim2.new(0, gNameLen(new_button), 0, 20)
 
                 local new_tab = Prefabs:FindFirstChild("Tab"):Clone()
                 new_tab.Parent = tabs
