@@ -1,4 +1,4 @@
-<img width="320" height="202" alt="image" src="https://github.com/user-attachments/assets/dd676972-8c0a-41e8-b60e-437405be4d52" />
+<img width="401" height="264" alt="image" src="https://github.com/user-attachments/assets/39b4c867-3897-405b-8aa0-3d158ea74a8a" />
 
 
 # join our discord server https://discord.gg/BcnxDQa32N
@@ -15,4 +15,4 @@
 - _G.searcher = false -- true = only find vic and send link (requires webhook) false = kill vic
 - loadstring(game:HttpGet("https://raw.githubusercontent.com/1toop/vichop/refs/heads/main/hop.lua"))()
 
-<img width="599" height="623" alt="image" src="https://github.com/user-attachments/assets/54ff80ca-38c7-470b-b8ae-5ac4855c7aeb" />
+<img width="401" height="264" alt="image" src="https://github.com/user-attachments/assets/734d4119-d183-4a75-9bb7-32b60c6b8c4c" />
