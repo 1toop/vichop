@@ -1,6 +1,3 @@
-<img width="613" height="664" alt="image" src="https://github.com/user-attachments/assets/7be577d5-f13d-4bff-a342-adc098fa5527" />
-
-
 # join our discord server https://discord.gg/BcnxDQa32N
 
 - Server hops until vicious bee is found
@@ -24,3 +21,6 @@ _G.sprout = false -- send discord notification when sprout found
 _G.windy = false -- send discord notification when windy found
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/1toop/vichop/main/hop.lua"))()
+```
+
+<img width="613" height="664" alt="image" src="https://github.com/user-attachments/assets/7be577d5-f13d-4bff-a342-adc098fa5527" />
