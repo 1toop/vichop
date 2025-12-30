@@ -12,6 +12,7 @@
 _G.hook = "" -- discord webhook url (optional)
 _G.uid = "" -- discord user id for ping (optional)
 _G.delay = "0" -- delay before server hop in seconds
+_G.minlvl = "1" -- minimum vic level to attack (1-12)
 _G.room = "" -- sync room name for searcher system (optional, any name)
 _G.mainuser = "" -- main user for auto searcher system (optional)
 
@@ -19,6 +20,7 @@ _G.searcher = false -- true = searcher mode (finds and sends to webhook), false 
 _G.vic = false -- send discord notification when vic found
 _G.sprout = false -- send discord notification when sprout found
 _G.windy = false -- send discord notification when windy found
+
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/1toop/vichop/main/hop.lua"))()
 ```
