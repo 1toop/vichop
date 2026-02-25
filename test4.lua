@@ -111,7 +111,6 @@ local Input = Instance.new("TextButton")
 local Input_Roundify_4px = Instance.new("ImageLabel")
 local Windows = Instance.new("Frame")
 
-imgui.DisplayOrder = 999
 imgui.ResetOnSpawn = false
 imgui.Parent = pgui
 
@@ -977,6 +976,7 @@ function library:AddWindow(title, options)
     options.tween_time = 0.1
     
     imgui.Name = options.screen_name or ("Gui" .. math.random(100000, 999999))
+    imgui.DisplayOrder = options.display_order or 999
 
     local Window = Prefabs:FindFirstChild("Window"):Clone()
     Window.Parent = Windows
