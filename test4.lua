@@ -837,7 +837,6 @@ local RS = game:GetService("RunService")
 local ps = game:GetService("Players")
 
 local p = ps.LocalPlayer
-local mouse = p:GetMouse()
 
 local Prefabs = imgui:WaitForChild("Prefabs")
 local Windows = imgui:FindFirstChild("Windows")
@@ -913,7 +912,7 @@ local function gMouse()
 end
 
 local function ripple(button, x, y)
-    spawn(function()
+    task.spawn(function()
         button.ClipsDescendants = true
 
         local circle = Prefabs:FindFirstChild("Circle"):Clone()
@@ -934,11 +933,17 @@ local function ripple(button, x, y)
             size = button.AbsoluteSize.X * 1.5
         end
 
-        circle:TweenSizeAndPosition(UDim2.new(0, size, 0, size), UDim2.new(0.5, -size / 2, 0.5, -size / 2), "Out", "Quad",
-            0.5, false, nil)
+        local sizetween = ts:Create(circle, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, size, 0, size)
+        })
+        local postween = ts:Create(circle, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Position = UDim2.new(0.5, -size / 2, 0.5, -size / 2)
+        })
+        sizetween:Play()
+        postween:Play()
         Resize(circle, { ImageTransparency = 1 }, 0.5)
 
-        wait(0.5)
+        task.wait(0.5)
         circle:Destroy()
     end)
 end
@@ -992,7 +997,7 @@ function library:AddWindow(title, options)
         local SplitFrame = Window:FindFirstChild("TabSelection"):FindFirstChild("Frame")
         local Toggle = Bar:FindFirstChild("Toggle")
 
-        spawn(function()
+        task.spawn(function()
             while true do
                 Bar.BackgroundColor3 = options.main_color
                 Base.BackgroundColor3 = options.main_color
@@ -1000,7 +1005,7 @@ function library:AddWindow(title, options)
                 Top.ImageColor3 = options.main_color
                 SplitFrame.BackgroundColor3 = options.main_color
 
-                RS.Heartbeat:Wait()
+                task.wait()
             end
         end)
     end
@@ -1011,22 +1016,14 @@ function library:AddWindow(title, options)
     Window.Draggable = true
 
     do -- Resize Window
-        local oldIcon = mouse.Icon
         local Entered = false
         Resizer.MouseEnter:Connect(function()
             Window.Draggable = false
-            if options.can_resize then
-                oldIcon = mouse.Icon
-                -- mouse.Icon = "http://www.roblox.com/asset?id=4745131330"
-            end
             Entered = true
         end)
 
         Resizer.MouseLeave:Connect(function()
             Entered = false
-            if options.can_resize then
-                mouse.Icon = oldIcon
-            end
             Window.Draggable = true
         end)
 
@@ -1035,7 +1032,7 @@ function library:AddWindow(title, options)
             if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
                 Held = true
 
-                spawn(function() -- Loop check
+                task.spawn(function() -- Loop check
                     if Entered and Resizer.Active and options.can_resize then
                         while Held and Resizer.Active do
                             local mouse_location = gMouse()
@@ -1054,7 +1051,7 @@ function library:AddWindow(title, options)
                                     options.tween_time)
                             end
 
-                            RS.Heartbeat:Wait()
+                            task.wait()
                         end
                     end
                 end)
@@ -1108,7 +1105,7 @@ function library:AddWindow(title, options)
                 end
 
                 open = not open
-                wait(options.tween_time)
+                task.wait(options.tween_time)
                 canopen = true
             end
         end)
@@ -1187,17 +1184,18 @@ function library:AddWindow(title, options)
                         button.ZIndex = button.ZIndex + (windows * 10)
                         button:GetChildren()[1].ZIndex = button:GetChildren()[1].ZIndex + (windows * 10)
 
-                        spawn(function()
+                        task.spawn(function()
                             while true do
                                 if button and button:GetChildren()[1] then
                                     button:GetChildren()[1].ImageColor3 = options.main_color
                                 end
-                                RS.Heartbeat:Wait()
+                                task.wait()
                             end
                         end)
 
                         button.MouseButton1Click:Connect(function()
-                            ripple(button, mouse.X, mouse.Y)
+                            local mousePos = UIS:GetMouseLocation()
+                            ripple(button, mousePos.X, mousePos.Y)
                             pcall(callback)
                         end)
 
@@ -1220,12 +1218,12 @@ function library:AddWindow(title, options)
                         switch.ZIndex = switch.ZIndex + (windows * 10)
                         switch:GetChildren()[1].ZIndex = switch:GetChildren()[1].ZIndex + (windows * 10)
 
-                        spawn(function()
+                        task.spawn(function()
                             while true do
                                 if switch and switch:GetChildren()[1] then
                                     switch:GetChildren()[1].ImageColor3 = options.main_color
                                 end
-                                RS.Heartbeat:Wait()
+                                task.wait()
                             end
                         end)
 
@@ -1324,7 +1322,7 @@ function library:AddWindow(title, options)
                                 if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
                                     Held = true
 
-                                    spawn(function() -- Loop check
+                                    task.spawn(function() -- Loop check
                                         if Entered and not slider_options.readonly then
                                             while Held and (not dropdown_open) do
                                                 local mouse_location = gMouse()
@@ -1356,7 +1354,7 @@ function library:AddWindow(title, options)
                                                 value.Text = tostring(sel_value)
                                                 pcall(callback, sel_value)
 
-                                                RS.Heartbeat:Wait()
+                                                task.wait()
                                             end
                                         end
                                     end)
@@ -1442,8 +1440,8 @@ function library:AddWindow(title, options)
 
                         UIS.InputBegan:Connect(function(a, b)
                             if checks.binding then
-                                spawn(function()
-                                    wait()
+                                task.spawn(function()
+                                    task.wait()
                                     checks.binding = false
                                 end)
                                 return
@@ -1459,8 +1457,11 @@ function library:AddWindow(title, options)
                             if checks.binding then return end
                             input.Text = "..."
                             checks.binding = true
-                            local a, b = UIS.InputBegan:Wait()
-                            keybind_data:SetKeybind(a.KeyCode)
+                            local conn
+                            conn = UIS.InputBegan:Connect(function(a, b)
+                                conn:Disconnect()
+                                keybind_data:SetKeybind(a.KeyCode)
+                            end)
                         end)
 
                         return keybind_data, keybind
@@ -1616,7 +1617,7 @@ function library:AddWindow(title, options)
                                 if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
                                     Held = true
 
-                                    spawn(function()         -- Loop check
+                                    task.spawn(function()         -- Loop check
                                         while Held and Entered1 and (not dropdown_open) do -- Palette
                                             local mouse_location = gMouse()
 
@@ -1634,7 +1635,7 @@ function library:AddWindow(title, options)
                                                 options.tween_time)
 
                                             update()
-                                            RS.Heartbeat:Wait()
+                                            task.wait()
                                         end
 
                                         while Held and Entered2 and (not dropdown_open) do -- Saturation
@@ -1646,7 +1647,7 @@ function library:AddWindow(title, options)
                                                 { Position = UDim2.new(0, 0, 0, math.abs(y - 100)) }, options.tween_time)
 
                                             update()
-                                            RS.Heartbeat:Wait()
+                                            task.wait()
                                         end
                                     end)
                                 end
@@ -1936,12 +1937,12 @@ function library:AddWindow(title, options)
 
                             if console_options.source == "Lua" then
                                 highlight_lua("Text")
-                                Source.Changed:Connect(highlight_lua)
+                                Source:GetPropertyChangedSignal("Text"):Connect(highlight_lua)
                             elseif console_options.source == "Logs" then
                                 Lines.Visible = false
 
                                 highlight_logs("Text")
-                                Source.Changed:Connect(highlight_logs)
+                                Source:GetPropertyChangedSignal("Text"):Connect(highlight_logs)
                             end
 
                             function console_data:Set(code)
@@ -2002,12 +2003,12 @@ function library:AddWindow(title, options)
                         folder.Parent = new_tab
                         button.Text = "      " .. folder_name
 
-                        spawn(function()
+                        task.spawn(function()
                             while true do
                                 if button and button:GetChildren()[1] then
                                     button:GetChildren()[1].ImageColor3 = options.main_color
                                 end
-                                RS.Heartbeat:Wait()
+                                task.wait()
                             end
                         end)
 
@@ -2034,11 +2035,11 @@ function library:AddWindow(title, options)
                             open = not open
                         end)
 
-                        spawn(function()
+                        task.spawn(function()
                             while true do
                                 Resize(folder, { Size = UDim2.new(1, 0, 0, (open and gFolderLen() or 20)) },
                                     options.tween_time)
-                                wait()
+                                task.wait()
                             end
                         end)
 
