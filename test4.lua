@@ -111,6 +111,7 @@ local Input = Instance.new("TextButton")
 local Input_Roundify_4px = Instance.new("ImageLabel")
 local Windows = Instance.new("Frame")
 
+imgui.Name = string.format("%x%x", math.random(0x10000, 0xfffff), math.random(0x10000, 0xfffff))
 imgui.ResetOnSpawn = false
 imgui.Parent = pgui
 
@@ -933,10 +934,10 @@ local function ripple(button, x, y)
             size = button.AbsoluteSize.X * 1.5
         end
 
-        local sizetween = ts:Create(circle, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        local sizetween = TweenService:Create(circle, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
             Size = UDim2.new(0, size, 0, size)
         })
-        local postween = ts:Create(circle, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        local postween = TweenService:Create(circle, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
             Position = UDim2.new(0.5, -size / 2, 0.5, -size / 2)
         })
         sizetween:Play()
@@ -997,17 +998,11 @@ function library:AddWindow(title, options)
         local SplitFrame = Window:FindFirstChild("TabSelection"):FindFirstChild("Frame")
         local Toggle = Bar:FindFirstChild("Toggle")
 
-        task.spawn(function()
-            while true do
-                Bar.BackgroundColor3 = options.main_color
-                Base.BackgroundColor3 = options.main_color
-                Base.ImageColor3 = options.main_color
-                Top.ImageColor3 = options.main_color
-                SplitFrame.BackgroundColor3 = options.main_color
-
-                task.wait()
-            end
-        end)
+        Bar.BackgroundColor3 = options.main_color
+        Base.BackgroundColor3 = options.main_color
+        Base.ImageColor3 = options.main_color
+        Top.ImageColor3 = options.main_color
+        SplitFrame.BackgroundColor3 = options.main_color
     end
 
     local Resizer = Window:WaitForChild("Resizer")
@@ -1184,14 +1179,9 @@ function library:AddWindow(title, options)
                         button.ZIndex = button.ZIndex + (windows * 10)
                         button:GetChildren()[1].ZIndex = button:GetChildren()[1].ZIndex + (windows * 10)
 
-                        task.spawn(function()
-                            while true do
-                                if button and button:GetChildren()[1] then
-                                    button:GetChildren()[1].ImageColor3 = options.main_color
-                                end
-                                task.wait()
-                            end
-                        end)
+                        if button:GetChildren()[1] then
+                            button:GetChildren()[1].ImageColor3 = options.main_color
+                        end
 
                         button.MouseButton1Click:Connect(function()
                             local mousePos = UIS:GetMouseLocation()
@@ -1218,14 +1208,9 @@ function library:AddWindow(title, options)
                         switch.ZIndex = switch.ZIndex + (windows * 10)
                         switch:GetChildren()[1].ZIndex = switch:GetChildren()[1].ZIndex + (windows * 10)
 
-                        task.spawn(function()
-                            while true do
-                                if switch and switch:GetChildren()[1] then
-                                    switch:GetChildren()[1].ImageColor3 = options.main_color
-                                end
-                                task.wait()
-                            end
-                        end)
+                        if switch:GetChildren()[1] then
+                            switch:GetChildren()[1].ImageColor3 = options.main_color
+                        end
 
                         local toggled = false
                         switch.MouseButton1Click:Connect(function()
@@ -2003,14 +1988,9 @@ function library:AddWindow(title, options)
                         folder.Parent = new_tab
                         button.Text = "      " .. folder_name
 
-                        task.spawn(function()
-                            while true do
-                                if button and button:GetChildren()[1] then
-                                    button:GetChildren()[1].ImageColor3 = options.main_color
-                                end
-                                task.wait()
-                            end
-                        end)
+                        if button:GetChildren()[1] then
+                            button:GetChildren()[1].ImageColor3 = options.main_color
+                        end
 
                         local function gFolderLen()
                             local n = 25
@@ -2024,24 +2004,20 @@ function library:AddWindow(title, options)
 
                         local open = false
                         button.MouseButton1Click:Connect(function()
-                            if open then -- Close
+                            if open then
                                 Resize(toggle, { Rotation = 0 }, options.tween_time)
                                 objects.Visible = false
-                            else -- Open
+                            else
                                 Resize(toggle, { Rotation = 90 }, options.tween_time)
                                 objects.Visible = true
                             end
-
                             open = not open
+                            updatefolder()
                         end)
 
-                        task.spawn(function()
-                            while true do
-                                Resize(folder, { Size = UDim2.new(1, 0, 0, (open and gFolderLen() or 20)) },
-                                    options.tween_time)
-                                task.wait()
-                            end
-                        end)
+                        local function updatefolder()
+                            Resize(folder, { Size = UDim2.new(1, 0, 0, open and gFolderLen() or 20) }, options.tween_time)
+                        end
 
                         for i, v in next, tab_data do
                             folder_data[i] = function(...)
